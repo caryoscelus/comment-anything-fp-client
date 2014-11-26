@@ -1,0 +1,2 @@
+var api_host = 'http://localhost:5000/';
+var site_id = 'test';
