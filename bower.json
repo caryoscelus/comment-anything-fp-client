@@ -1,0 +1,27 @@
+{
+  "name": "comment-anything-fp-client",
+  "version": "0.0.1",
+  "homepage" : "https://github.com/caryoscelus/comment-anything-fp-client",
+  "authors": [
+    "caryoscelus <caryoscelus@gmx.com>"
+  ],
+  "description": "client for comment-anything-fp",
+  "license": "GPLv3+",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "purescript-json": "caryoscelus/purescript-json",
+    "purescript-xhr": "philopon/purescript-xhr",
+    "purescript-simple-dom": "caryoscelus/purescript-simple-dom",
+    "purescript-smolder": "bodil/purescript-smolder",
+    "purescript-foldable-traversable": "purescript/purescript-foldable-traversable"
+  },
+  "resolutions": {
+    "purescript-maps": "0.1.3"
+  }
+}
