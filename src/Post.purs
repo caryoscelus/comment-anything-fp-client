@@ -17,17 +17,10 @@
 
 module Post where
 
-import Text.Smolder.HTML (div, h2, p)
-import Text.Smolder.HTML.Attributes (className)
-import Text.Smolder.Markup (text, (!), Markup())
-import Text.Smolder.Renderer.String (render)
-
 import Data.JSON
 import qualified Data.Map as M
-import Data.Array
 import Data.Either
 import Data.Maybe
-import Data.Foldable
 import Data.Traversable
 
 import Util
@@ -61,12 +54,3 @@ instance postsFromJSON :: FromJSON Posts where
         cs <- traverse parseJSON comments
         return $ Posts cs
     parseJSON _ = fail "Posts parse fail: should be Object"
-
-renderPost :: Post -> String
-renderPost (Post post) = render $
-    div ! className "post" $ do
-        h2 $ text post.nick
-        p $ text post.text
-
-renderPosts :: Posts -> String
-renderPosts (Posts posts) = mconcat $ map renderPost posts

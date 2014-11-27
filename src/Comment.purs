@@ -36,6 +36,7 @@ import Data.JSON (decode)
 
 import Post
 import Config
+import HTML
 
 main = do
     addUIEventListener LoadEvent onLoad globalWindow
