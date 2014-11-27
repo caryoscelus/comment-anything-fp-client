@@ -21,7 +21,7 @@ module HTML where
 import Data.Foldable
 import Data.Array
 
-import Text.Smolder.HTML (div, h2, p, form, input, br, textarea)
+import Text.Smolder.HTML (div, h2, h3, p, form, input, br, textarea)
 import Text.Smolder.HTML.Attributes (className, type', value)
 import Text.Smolder.Markup (text, attribute, (!), Markup())
 import Text.Smolder.Renderer.String (render)
@@ -31,7 +31,7 @@ import Post
 renderPost :: Post -> String
 renderPost (Post post) = render $
     div ! className "comment" $ do
-        h2 $ text post.nick
+        h2 $ text $ post.nick ++ " @ " ++ post.date
         p $ text post.text
 
 renderPosts :: Posts -> String

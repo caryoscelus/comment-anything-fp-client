@@ -29,6 +29,7 @@ import Util
 data Post = Post
     { nick :: String
     , text :: String
+    , date :: String
     }
 
 data Posts = Posts [Post]
@@ -43,15 +44,18 @@ instance postToJSON :: ToJSON Post where
     toJSON (Post post) = JObject $ M.fromList
         [ Tuple "nick" $ toJSON post.nick
         , Tuple "text" $ toJSON post.text
+        , Tuple "date" $ toJSON post.date
         ]
 
 instance postFromJSON :: FromJSON Post where
     parseJSON (JObject obj) = do
         JString nick <- maybeFail "no nick" $ M.lookup "nick" obj
         JString text <- maybeFail "no text" $ M.lookup "text" obj
+        JString date <- return $ maybe (JString "??") id $ M.lookup "date" obj
         return $ Post
             { nick : nick
             , text : text
+            , date : date
             }
     parseJSON _ = fail "Post parse fail: should be Object"
 

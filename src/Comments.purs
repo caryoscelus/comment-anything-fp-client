@@ -38,6 +38,7 @@ import Data.JSON (decode, encode)
 import Post
 import Config
 import HTML
+import Date
 
 main = do
     addUIEventListener LoadEvent onLoad globalWindow
@@ -85,9 +86,10 @@ postComment = do
     Just text_input <- document globalWindow >>= querySelector "#comment_input_text"
     nick <- value nick_input
     text <- value text_input
+    date <- getDate
     loc <- getPath globalWindow
     
-    let msg = encode $ Post { nick : nick, text : text }
+    let msg = encode $ Post { nick : nick, text : text, date : date }
     _ <- ajax defaultAjaxOptions
         { method = "POST"
         , headers = [Tuple "Content-Type" "application/json"]
