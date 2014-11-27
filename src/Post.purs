@@ -21,6 +21,7 @@ import Data.JSON
 import qualified Data.Map as M
 import Data.Either
 import Data.Maybe
+import Data.Tuple
 import Data.Traversable
 
 import Util
@@ -37,6 +38,12 @@ instance showPosts :: Show Posts where
 
 instance showPost :: Show Post where
     show _ = "post"
+
+instance postToJSON :: ToJSON Post where
+    toJSON (Post post) = JObject $ M.fromList
+        [ Tuple "nick" $ toJSON post.nick
+        , Tuple "text" $ toJSON post.text
+        ]
 
 instance postFromJSON :: FromJSON Post where
     parseJSON (JObject obj) = do

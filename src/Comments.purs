@@ -22,17 +22,18 @@ import Debug.Trace (Trace(), trace)
 import Control.Monad.Eff
 
 import Data.Maybe
+import Data.Tuple
 
 import Data.DOM.Simple.Document ()
-import Data.DOM.Simple.Element (querySelector, setInnerHTML)
+import Data.DOM.Simple.Element (querySelector, setInnerHTML, value)
 import Data.DOM.Simple.Window (globalWindow, document, location, getLocation)
 import Data.DOM.Simple.Types
 import Data.DOM.Simple.Events (UIEvent, UIEventType(..), addUIEventListener)
 
-import Network.XHR (get, defaultAjaxOptions, onSuccess, Response(), getResponseText)
+import Network.XHR (get, defaultAjaxOptions, onSuccess, Response(), getResponseText, rawBody, ajax)
 import Network.XHR.Internal (Ajax(..))
 
-import Data.JSON (decode)
+import Data.JSON (decode, encode)
 
 import Post
 import Config
@@ -65,7 +66,7 @@ apiCallAddr api = apiHost ++ api
 commentsUpdate :: HTMLElement -> Response -> Eff (dom :: DOM, trace :: Trace, ajax :: Ajax) Unit
 commentsUpdate div response = do
     txt <- getResponseText response
-    let postsHtml = maybe "wrong json reply" renderPosts (decode txt :: Maybe Posts)
+    let postsHtml = maybe "wrong json reply" renderFull (decode txt :: Maybe Posts)
     setInnerHTML postsHtml div
 
 commentsTimeout :: HTMLElement -> Response -> Eff (dom :: DOM, ajax :: Ajax, trace :: Trace) Unit
@@ -75,3 +76,23 @@ commentsTimeout div response = do
 commentsError :: HTMLElement -> Response -> Eff (dom :: DOM, ajax :: Ajax, trace :: Trace) Unit
 commentsError div response = do
     setInnerHTML "error" div
+
+-- | This is called when user clicks "Send button"
+postComment :: Eff (dom :: DOM, ajax :: Ajax, trace :: Trace) Unit
+postComment = do
+    trace "sending message.."
+    Just nick_input <- document globalWindow >>= querySelector "#comment_input_nick"
+    Just text_input <- document globalWindow >>= querySelector "#comment_input_text"
+    nick <- value nick_input
+    text <- value text_input
+    loc <- getPath globalWindow
+    
+    let msg = encode $ Post { nick : nick, text : text }
+    _ <- ajax defaultAjaxOptions
+        { method = "POST"
+        , headers = [Tuple "Content-Type" "application/json"]
+        , onReadyStateChange = onSuccess $ \_ -> reloadComments "Comment added, reloading.."
+        , url = apiCallAddr "add_comment/" ++ siteId ++ "/root" ++ loc
+        } {} (rawBody msg)
+    
+    return unit
