@@ -15,9 +15,9 @@
     "tests"
   ],
   "dependencies": {
-    "purescript-json": "caryoscelus/purescript-json",
+    "purescript-json": "philopon/purescript-json",
     "purescript-xhr": "philopon/purescript-xhr",
-    "purescript-simple-dom": "caryoscelus/purescript-simple-dom",
+    "purescript-simple-dom": "aktowns/purescript-simple-dom",
     "purescript-smolder": "bodil/purescript-smolder",
     "purescript-foldable-traversable": "purescript/purescript-foldable-traversable"
   },
